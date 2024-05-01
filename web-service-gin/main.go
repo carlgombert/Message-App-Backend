@@ -22,8 +22,8 @@ type test struct {
 }
 
 var testArr = []test{
-	{ID: "1", Title: "Blue Train"},
-	{ID: "2", Title: "Jeru"},
+	{ID: "1", Title: "Pulp Fiction"},
+	{ID: "2", Title: "No Country for Old Men"},
 }
 
 type Secrets struct {
