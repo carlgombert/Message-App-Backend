@@ -19,10 +19,15 @@ var testArr = []test{
 func main() {
 	router := gin.Default()
 
-	//test api
+	//test APIs
 	router.GET("/test", getTest)
+	router.GET("/", endPoint)
 
 	router.Run("localhost:8080")
+}
+
+func endPoint(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"message": "message app backend"})
 }
 
 func getTest(c *gin.Context) {
