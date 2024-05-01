@@ -11,9 +11,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-)
 
-const uri = "mongodb://127.0.0.1:27017/messageApp"
+	"encoding/json"
+	"os"
+)
 
 type test struct {
 	ID    string `json:"id"`
@@ -25,7 +26,31 @@ var testArr = []test{
 	{ID: "2", Title: "Jeru"},
 }
 
+type Secrets struct {
+	ConnectionURI string `json:"connectionURI"`
+}
+
 func main() {
+
+	// grabbing the connection URI for database from secrets file
+	// I can help you set this up on your machine
+	file, err := os.Open("secrets.json")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	var secrets Secrets
+
+	decoder := json.NewDecoder(file)
+	if err := decoder.Decode(&secrets); err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Username:", secrets.ConnectionURI)
+
+	var uri = secrets.ConnectionURI
+
 	//connect to db
 	// Use the SetServerAPIOptions() method to set the Stable API version to 1
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
