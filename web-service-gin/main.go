@@ -9,6 +9,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"net/http"
+	"time"
+
+	"github.com/gorilla/websocket"
 
 	"github.com/gin-gonic/gin"
 
@@ -28,6 +31,11 @@ var testArr = []test{
 
 type Secrets struct {
 	ConnectionURI string `json:"connectionURI"`
+}
+
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
 }
 
 func main() {
@@ -81,6 +89,7 @@ func main() {
 	//test APIs
 	router.GET("/test", getTest)
 	router.GET("/", endPoint)
+	router.GET("/ws", webSocket)
 
 	router.Run("localhost:8080")
 }
@@ -91,4 +100,18 @@ func endPoint(c *gin.Context) {
 
 func getTest(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, testArr)
+}
+
+func webSocket(c *gin.Context) {
+	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
+	if err != nil {
+		fmt.Println("WebSocket upgrade failed:", err)
+		return
+	}
+	defer conn.Close()
+
+	for {
+		conn.WriteMessage(websocket.TextMessage, []byte("Hello, WebSocket!"))
+		time.Sleep(time.Second)
+	}
 }
