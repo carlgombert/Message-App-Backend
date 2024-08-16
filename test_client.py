@@ -13,7 +13,7 @@ def on_close(ws):
 def on_open(ws):
     print("Connection established")
     # You can send messages after the connection is established
-    ws.send("Hello, WebSocket!")
+    ws.send("Hey, WebSocket!!!")
 
 
 websocket.enableTrace(True)
